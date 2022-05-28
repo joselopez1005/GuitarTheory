@@ -12,7 +12,6 @@ import com.example.guitartheory.presentation.chord_list_screen.StringItem
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
-@Destination(start = true)
 fun FretBoard() {
 	Column(modifier = Modifier.fillMaxSize()) {
 		FretboardString()

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.presentation.chord_list_screen.ChordListingViewModel
-import com.example.guitartheory.presentation.fretboard.NavGraphs
+import com.example.guitartheory.presentation.chord_list_screen.NavGraphs
 import com.example.guitartheory.ui.theme.GuitarTheoryTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
