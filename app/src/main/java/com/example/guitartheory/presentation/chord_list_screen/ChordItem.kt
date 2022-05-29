@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.guitartheory.domain.model.Chord
 import com.example.guitartheory.domain.model.ChordDetails
 
 @Composable
