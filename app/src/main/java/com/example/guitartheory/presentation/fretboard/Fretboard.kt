@@ -13,12 +13,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.domain.model.ChordDetails
+import com.example.guitartheory.domain.model.ChordDetailsFormatted
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 @Destination
 fun FretBoard(
-	chordDetails: ChordDetails,
+	chordDetails: ChordDetailsFormatted,
 	fretboardViewModel: FretboardViewModel = hiltViewModel()
 ) {
 	fretboardViewModel.setChordDetailsState(chordDetails)

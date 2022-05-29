@@ -10,10 +10,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.guitartheory.domain.model.ChordDetails
+import com.example.guitartheory.domain.model.ChordDetailsFormatted
 
 @Composable
 fun ChordItem(
-	chord: ChordDetails,
+	chord: ChordDetailsFormatted,
 	modifier: Modifier = Modifier
 ) {
 	Row(
@@ -36,7 +37,7 @@ fun ChordItem(
 				)
 				Spacer(modifier = Modifier.width(4.dp))
 				Text(
-					text = chord.fingering,
+					text = chord.fingering.toString(),
 					fontWeight = FontWeight.SemiBold,
 					color = MaterialTheme.colors.onBackground
 				)

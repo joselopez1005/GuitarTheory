@@ -44,17 +44,15 @@ fun ChordListScreen(
 		LazyColumn(
 			modifier = Modifier.fillMaxSize()
 		) {
-			items(state.chordList.size) { i ->
-				val currentChord = state.chordList[i]
+			items(state.chordList.chordDetailsFormattedList.size) { i ->
+				val currentChord = state.chordList.chordDetailsFormattedList[i]
 				ChordItem(
 					chord = currentChord,
 					modifier = Modifier
 						.fillMaxWidth()
 						.padding(16.dp)
 						.clickable {
-							navigation.navigate(
-								FretBoardDestination(currentChord)
-							)
+							FretBoardDestination(currentChord)
 						}
 				)
 

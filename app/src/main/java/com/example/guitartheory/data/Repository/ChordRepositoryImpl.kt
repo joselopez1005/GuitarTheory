@@ -1,8 +1,10 @@
 package com.example.guitartheory.data.Repository
 
+import com.example.guitartheory.data.mapper.toChordFormatted
 import com.example.guitartheory.data.remote.UberchordApi
 import com.example.guitartheory.domain.model.Chord
 import com.example.guitartheory.domain.model.ChordDetails
+import com.example.guitartheory.domain.model.ChordFormatted
 import com.example.guitartheory.domain.repository.ChordRepository
 import com.example.guitartheory.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +17,7 @@ class ChordRepositoryImpl @Inject constructor(
 	private val api: UberchordApi
 ) : ChordRepository {
 
-	override suspend fun getChord(query: String): Flow<Resource<Chord>> {
+	override suspend fun getChord(query: String): Flow<Resource<ChordFormatted>> {
 		return flow {
 			// Set loading to true
 			emit(Resource.Loading(true))
@@ -23,7 +25,7 @@ class ChordRepositoryImpl @Inject constructor(
 			// API call
 			val remoteChord =
 				try {
-					api.getChord(query)
+					api.getChord(query).toChordFormatted()
 				} catch (e: IOException) {
 					e.printStackTrace()
 					emit(Resource.Error("Couldn't load data"))
