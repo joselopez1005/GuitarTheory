@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class ChordDetailsFormatted (
 	val strings: List<String>,
 	val fingering: List<String>,
-	val chordName: String
+	val chordName: List<String>
 ) : Parcelable

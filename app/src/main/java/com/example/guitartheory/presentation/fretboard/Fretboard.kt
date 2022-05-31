@@ -8,71 +8,143 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.guitartheory.domain.model.ChordDetails
 import com.example.guitartheory.domain.model.ChordDetailsFormatted
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 @Destination
 fun FretBoard(
+	modifier: Modifier = Modifier,
 	chordDetails: ChordDetailsFormatted,
-	fretboardViewModel: FretboardViewModel = hiltViewModel()
+	fretboardViewModel: FretboardViewModel = hiltViewModel(),
 ) {
 	fretboardViewModel.setChordDetailsState(chordDetails)
-
 	val states = fretboardViewModel.states
-	Column(modifier = Modifier.fillMaxSize()) {
-		for(i in 1..6) {
-			CompleteString(amountOfFrets = states.amountOfFrets)
+
+	Column(
+		modifier = modifier
+			.fillMaxSize()
+			.padding(20.dp)
+	) {
+		for (currString in 0 until states.chordDetails.strings.size) {
+			Row(
+				horizontalArrangement = Arrangement.SpaceBetween,
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				Text(
+					text = states.currentTuning[currString],
+					modifier = Modifier
+						.weight(0.4f)
+				)
+				CompleteString(
+					fretPressed = states.chordDetails.strings[currString],
+					fingerPosition = states.chordDetails.fingering[currString],
+					amountOfFret = states.amountOfFrets,
+					modifier = Modifier.weight(9.6f)
+				)
+			}
 		}
 	}
 }
 
 @Composable
 fun CompleteString(
-	modifier: Modifier = Modifier,
-	amountOfFrets: Int
+	fretPressed: String,
+	fingerPosition: String,
+	amountOfFret: Int,
+	modifier: Modifier = Modifier
 ) {
-	Row {
-		for (fret in 1..amountOfFrets) {
-			StringItem(modifier = modifier.weight(1f), isOpen = false, note = "F")
+	Row(
+		verticalAlignment = Alignment.CenterVertically,
+		horizontalArrangement = Arrangement.SpaceAround,
+		modifier = modifier
+	) {
+		for(fret in 0 until amountOfFret) {
+			if(!isOpen(fretPressed, fingerPosition) && !isMuted(fretPressed, fingerPosition)) {
+				FretItem(
+					modifier = Modifier
+						.height(30.dp)
+						.weight(1f),
+					fingerPosition = fingerPosition,
+					fretPosition = fret,
+					fretPressed = fretPressed
+				)
+			} else {
+				FretItem(
+					modifier = Modifier
+						.height(30.dp)
+						.weight(1f),
+					fretPosition = fret
+				)
+			}
+		}
+	}
+
+}
+
+@Composable
+fun FretItem(
+	modifier: Modifier = Modifier,
+	fretPosition: Int,
+	fretPressed: String? = null,
+	fingerPosition: String? = null
+) {
+	Box(
+		contentAlignment = Alignment.Center,
+		modifier = modifier
+	) {
+		Divider(
+			color = Color.Black,
+			modifier = Modifier
+				.fillMaxWidth()
+				.height(3.dp)
+		)
+		if(fretPosition != 0) {
+			Divider(
+				color = Color.Black,
+				modifier = Modifier
+					.fillMaxHeight()
+					.width(5.dp)
+					.align(Alignment.TopStart)
+			)
+		}
+		if (fingerPosition != null && fretPressed != null) {
+			if(fretPressed.toInt() == fretPosition) {
+				PressedSymbol(fingerPosition = fingerPosition)
+			}
 		}
 	}
 }
 
 @Composable
-fun StringItem(
-	modifier: Modifier = Modifier,
-	isOpen: Boolean,
-	note: String,
+fun PressedSymbol(
+	fingerPosition: String,
+	modifier: Modifier = Modifier
 ) {
 	Box(
-		modifier = modifier,
+		modifier = modifier
+			.height(20.dp)
+			.width(20.dp)
+			.clip(CircleShape)
+			.background(Color.Red),
 		contentAlignment = Alignment.Center,
 	) {
-		Divider(
-			color = Color.Black,
-			thickness = 5.dp
+		Text(
+			text = fingerPosition,
 		)
-		Box(
-			modifier = Modifier
-				.padding(10.dp)
-				.height(50.dp)
-				.width(50.dp)
-				.background(color = Color.Blue, shape = CircleShape),
-			contentAlignment = Alignment.Center
-		) {
-			Text(
-				text = note,
-				color = Color.White,
-				textAlign = TextAlign.Center,
-			)
-		}
 	}
+}
+
+fun isOpen(fretPressed: String, fingerPosition: String): Boolean {
+	return fretPressed == "0" && fingerPosition == "X"
+}
+
+fun isMuted(fretPressed: String, fingerPosition: String): Boolean {
+	return fretPressed == "X" && fingerPosition == "X"
 }
 
 
