@@ -1,3 +1,19 @@
 <resources>
 	<string name="app_name">GuitarTheory</string>
+
+	<string name="resources">Resources</string>
+	<string name="chord_search">Chord Search</string>
+	<string name="fretboard_note">Fretboard Notes</string>
+	<string name="chord_progression">Chord Progression</string>
+	
+	<string name="practice">Practice</string>
+	<string name="note_identification">Note ID</string>
+	<string name="interval_identification">Interval ID</string>
+	<string name="scale_identification">Scale ID</string>
+	<string name="chord_identification">Chord ID</string>
+
+	<string name="home">HOME</string>
+	<string name="profile">PROFILE</string>
+
+
 </resources>

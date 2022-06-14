@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.domain.model.ChordDetailsFormatted
@@ -137,6 +138,18 @@ fun PressedSymbol(
 			text = fingerPosition,
 		)
 	}
+}
+
+@Composable
+@Preview(showBackground = true)
+fun FretboardPreview() {
+	FretBoard(
+		chordDetails = ChordDetailsFormatted(
+			chordName = listOf("C"),
+			strings = listOf("X", "3", "2", "0", "1", "0"),
+			fingering = listOf("X", "3", "2", "X", "1", "X")
+		)
+	)
 }
 
 fun isOpen(fretPressed: String, fingerPosition: String): Boolean {
