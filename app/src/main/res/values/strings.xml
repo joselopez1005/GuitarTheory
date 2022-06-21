@@ -15,5 +15,7 @@
 	<string name="home">HOME</string>
 	<string name="profile">PROFILE</string>
 
+	<string name="placeholder_search">Search</string>
+
 
 </resources>

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.R
 import com.example.guitartheory.domain.model.DrawableStringPair
-import com.example.guitartheory.presentation.destinations.ChordListScreenDestination
+import com.example.guitartheory.presentation.destinations.ChordListScreenUpdatedDestination
 import com.example.guitartheory.presentation.destinations.HomeScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -53,15 +53,21 @@ fun HomeScreen(
 				ActivityCardItem(
 					R.string.chord_search,
 					R.drawable.chord_search,
-					modifier = Modifier.padding(end = 8.dp)
-						.clickable { navigation.navigate(
-							ChordListScreenDestination()
-						) }
+					modifier = Modifier
+						.padding(end = 8.dp)
+						.clickable {
+							navigation.navigate(
+								ChordListScreenUpdatedDestination()
+							)
+						}
 				)
 				ActivityCardItem(
 					R.string.fretboard_note,
 					R.drawable.fretboard_note,
-					modifier = Modifier.padding(end = 8.dp)
+					modifier = Modifier
+						.padding(end = 8.dp)
+						.clickable {
+						}
 				)
 			}
 		}
