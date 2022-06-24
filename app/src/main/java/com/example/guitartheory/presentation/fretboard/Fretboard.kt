@@ -16,16 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.domain.model.ChordDetailsFormatted
+import com.example.guitartheory.util.FretboardHelper
+import com.example.guitartheory.util.FretboardHelper.isMuted
+import com.example.guitartheory.util.FretboardHelper.isOpen
 import com.ramcosta.composedestinations.annotation.Destination
-
-
-fun isOpen(fretPressed: String, fingerPosition: String): Boolean {
-	return fretPressed == "0" && fingerPosition == "X"
-}
-
-fun isMuted(fretPressed: String, fingerPosition: String): Boolean {
-	return fretPressed == "X" && fingerPosition == "X"
-}
 
 @Composable
 @Destination
@@ -46,24 +40,40 @@ fun FretboardUpdated(
 	) {
 		for (string in 0 until state.chordDetails.strings.size) {
 			Row {
+				Box(
+					contentAlignment = Alignment.Center,
+					modifier = Modifier
+						.width(30.dp)
+						.height((30 * scale).dp)
+						.padding(end = 8.dp)
+				) {
+					Text(
+						text = state.currentTuning[string],
+						style = MaterialTheme.typography.body1,
+					)
+				}
 				for (fret in 0..4) {
 					val fretPressed = state.chordDetails.strings[string]
 					val fingerPosition = state.chordDetails.fingering[string]
-					if (!isOpen(fretPressed, fingerPosition) && !isMuted(
-							fretPressed,
-							fingerPosition
-						)
-					) {
+					if (!isOpen(fretPressed, fingerPosition) && !isMuted(fretPressed, fingerPosition)) {
+						var note = FretboardHelper.fingerPositionToNote(string, fretPressed.toInt())
 						FretElement(
 							fingerPosition = fingerPosition,
 							fretPosition = fret,
 							fretPressed = fretPressed,
-							scale = state.scale
+							state = state,
+							note = note
+						)
+					} else if(isMuted(fretPressed,fingerPosition)) {
+						FretElement(
+							fretPosition = fret,
+							state = state,
+							isMuted = true
 						)
 					} else {
 						FretElement(
 							fretPosition = fret,
-							scale = state.scale
+							state = state
 						)
 					}
 				}
@@ -79,7 +89,9 @@ fun FretElement(
 	fretPosition: Int,
 	fretPressed: String? = null,
 	fingerPosition: String? = null,
-	scale: Float
+	note: String? = null,
+	isMuted: Boolean = false,
+	state: FretboardStates
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -92,13 +104,15 @@ fun FretElement(
 				color = Color.Black,
 				thickness = 1.dp,
 				modifier = Modifier
-					.width((50 * scale).dp)
+					.width((50 * state.scale).dp)
 			)
-			if (fingerPosition != null && fretPressed != null) {
+			if (fingerPosition != null && fretPressed != null && note != null) {
 				if (fretPressed.toInt() == fretPosition) {
 					PressedSymbolElement(
-						scale = scale,
+						state = state,
 						fingerPosition = fingerPosition,
+						note = note,
+						isMuted = isMuted,
 						modifier = Modifier.align(Alignment.TopCenter)
 					)
 				}
@@ -108,7 +122,7 @@ fun FretElement(
 			color = Color.Black,
 			thickness = 2.dp,
 			modifier = Modifier
-				.height((30 * scale).dp)
+				.height((30 * state.scale).dp)
 				.width(2.dp)
 		)
 	}
@@ -116,20 +130,36 @@ fun FretElement(
 
 @Composable
 fun PressedSymbolElement(
-	scale: Float,
+	state: FretboardStates,
 	fingerPosition: String,
+	note: String,
+	isMuted: Boolean,
 	modifier: Modifier = Modifier
 ) {
-		Box(
-			modifier = modifier
-				.height((20 * scale).dp)
-				.width((20 * scale).dp)
-				.clip(CircleShape)
-				.background(MaterialTheme.colors.primary),
-			contentAlignment = Alignment.Center
-		) {
-			// Min size where text is still visible
-			if( scale > 0.5f) {
+	Box(
+		modifier = modifier
+			.height((20 * state.scale).dp)
+			.width((20 * state.scale).dp)
+			.clip(CircleShape)
+			.background(MaterialTheme.colors.primary),
+		contentAlignment = Alignment.Center
+	) {
+		// Min size where text is still visible
+		if (state.scale > 0.7f) {
+			if (isMuted) {
+				Text(
+					text = "X",
+					style = MaterialTheme.typography.body2,
+					color = MaterialTheme.colors.onPrimary
+				)
+			}
+			else if (state.showNote) {
+				Text(
+					text = note,
+					style = MaterialTheme.typography.body2,
+					color = MaterialTheme.colors.onPrimary
+				)
+			} else {
 				Text(
 					text = fingerPosition,
 					style = MaterialTheme.typography.body2,
@@ -137,7 +167,9 @@ fun PressedSymbolElement(
 				)
 			}
 		}
+	}
 }
+
 
 
 

@@ -104,6 +104,6 @@ fun ChordElement(
 			text = chord.chordName.toString(),
 			style = MaterialTheme.typography.h3
 		)
-		FretboardUpdated(scale = 0.5f, chord = chord)
+		FretboardUpdated(scale = 0.6f, chord = chord)
 	}
 }

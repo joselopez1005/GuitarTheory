@@ -16,6 +16,7 @@ fun ChordDetails.toChordDetailsFormatted(): ChordDetailsFormatted {
 	return ChordDetailsFormatted(
 		strings = strings.split(" ").map { it -> it.trim() },
 		fingering = fingering.split(" ").map { it -> it.trim() },
-		chordName = chordName.split(",").map { it.trim() }
+		chordName = chordName.split(",").map { it.trim() },
+		tones = tones.split(",").map { it.trim() }
 	)
 }

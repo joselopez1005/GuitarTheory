@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -31,12 +33,14 @@ class MainActivity : ComponentActivity() {
 				) {
 					Scaffold(
 						bottomBar = { HomeScreenBottomNavigation(Modifier.fillMaxWidth()) }
-					) {
-						val systemUiController = rememberSystemUiController()
-						systemUiController.setSystemBarsColor(
-							color = MaterialTheme.colors.primary
-						)
-						DestinationsNavHost(navGraph = NavGraphs.root)
+					) { innerPadding ->
+						Box(modifier = Modifier.padding(innerPadding)) {
+							val systemUiController = rememberSystemUiController()
+							systemUiController.setSystemBarsColor(
+								color = MaterialTheme.colors.primary
+							)
+							DestinationsNavHost(navGraph = NavGraphs.root)
+						}
 					}
 				}
 			}
