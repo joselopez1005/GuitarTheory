@@ -14,8 +14,8 @@ class FretboardViewModel @Inject constructor() : ViewModel() {
 
 	var states by mutableStateOf( FretboardStates() )
 
-	fun setChordDetailsState(chordDetails: ChordDetailsFormatted, scale: Float) {
-		states = states.copy(scale = scale, chordDetails = chordDetails)
+	fun setChordDetailsState(chordDetails: ChordDetailsFormatted, scale: Float, showNote: Boolean) {
+		states = states.copy(scale = scale, chordDetails = chordDetails, showNote = showNote)
 	}
 
 }

@@ -17,5 +17,10 @@
 
 	<string name="placeholder_search">Search</string>
 
+	<string name="muted_string_symbol">X</string>
+	<string name="show_notes">Show Notes</string>
+	<string name="shorthand_notation">Shorthand Notation</string>
+	<string name="tones">Tones</string>
+
 
 </resources>

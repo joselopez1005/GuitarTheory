@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.guitartheory.domain.model.ChordDetailsFormatted
 import com.ramcosta.composedestinations.annotation.Destination
 import com.example.guitartheory.R
-import com.example.guitartheory.presentation.destinations.FretboardUpdatedDestination
+import com.example.guitartheory.presentation.destinations.ChordSearchResultScreenDestination
 import com.example.guitartheory.presentation.fretboard.FretboardUpdated
 
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -54,7 +54,7 @@ fun ChordListScreenUpdated(
 				ChordElement(chord = item, Modifier
 					.fillMaxWidth()
 					.clickable {
-						navigation.navigate(FretboardUpdatedDestination(scale = 1f, chord = item))
+						navigation.navigate(ChordSearchResultScreenDestination(chord = item))
 					}
 				)
 			}
@@ -104,6 +104,11 @@ fun ChordElement(
 			text = chord.chordName.toString(),
 			style = MaterialTheme.typography.h3
 		)
-		FretboardUpdated(scale = 0.6f, chord = chord)
+		FretboardUpdated(
+			scale = 0.6f,
+			chord = chord,
+			showNote = false,
+			modifier = Modifier.padding(16.dp)
+		)
 	}
 }

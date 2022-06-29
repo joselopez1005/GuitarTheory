@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.guitartheory.R
 import com.example.guitartheory.domain.model.ChordDetailsFormatted
 import com.example.guitartheory.util.FretboardHelper
 import com.example.guitartheory.util.FretboardHelper.isMuted
@@ -22,24 +24,27 @@ import com.example.guitartheory.util.FretboardHelper.isOpen
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
-@Destination
 fun FretboardUpdated(
 	chord: ChordDetailsFormatted,
 	scale: Float,
+	showNote: Boolean,
+	modifier: Modifier = Modifier,
 	viewModel: FretboardViewModel = hiltViewModel()
 ) {
-	viewModel.setChordDetailsState(chord, scale)
+	viewModel.setChordDetailsState(chord, scale,showNote)
 
 	val state = viewModel.states
 
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally,
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxWidth()
+		modifier = modifier
 	) {
 		for (string in 0 until state.chordDetails.strings.size) {
+			val fretPressed = state.chordDetails.strings[string]
+			val fingerPosition = state.chordDetails.fingering[string]
+
 			Row {
+				// Beginning text for tuning
 				Box(
 					contentAlignment = Alignment.Center,
 					modifier = Modifier
@@ -48,27 +53,21 @@ fun FretboardUpdated(
 						.padding(end = 8.dp)
 				) {
 					Text(
-						text = state.currentTuning[string],
+						text = if (isMuted(fretPressed,fingerPosition)) stringResource(R.string.muted_string_symbol) else state.currentTuning[string],
 						style = MaterialTheme.typography.body1,
 					)
 				}
+
+				// Start of Fretboard representation
 				for (fret in 0..4) {
-					val fretPressed = state.chordDetails.strings[string]
-					val fingerPosition = state.chordDetails.fingering[string]
 					if (!isOpen(fretPressed, fingerPosition) && !isMuted(fretPressed, fingerPosition)) {
-						var note = FretboardHelper.fingerPositionToNote(string, fretPressed.toInt())
+						val note = FretboardHelper.fingerPositionToNote(string, fretPressed.toInt())
 						FretElement(
 							fingerPosition = fingerPosition,
 							fretPosition = fret,
 							fretPressed = fretPressed,
 							state = state,
 							note = note
-						)
-					} else if(isMuted(fretPressed,fingerPosition)) {
-						FretElement(
-							fretPosition = fret,
-							state = state,
-							isMuted = true
 						)
 					} else {
 						FretElement(
@@ -90,7 +89,6 @@ fun FretElement(
 	fretPressed: String? = null,
 	fingerPosition: String? = null,
 	note: String? = null,
-	isMuted: Boolean = false,
 	state: FretboardStates
 ) {
 	Row(
@@ -112,7 +110,6 @@ fun FretElement(
 						state = state,
 						fingerPosition = fingerPosition,
 						note = note,
-						isMuted = isMuted,
 						modifier = Modifier.align(Alignment.TopCenter)
 					)
 				}
@@ -133,7 +130,6 @@ fun PressedSymbolElement(
 	state: FretboardStates,
 	fingerPosition: String,
 	note: String,
-	isMuted: Boolean,
 	modifier: Modifier = Modifier
 ) {
 	Box(
@@ -146,14 +142,7 @@ fun PressedSymbolElement(
 	) {
 		// Min size where text is still visible
 		if (state.scale > 0.7f) {
-			if (isMuted) {
-				Text(
-					text = "X",
-					style = MaterialTheme.typography.body2,
-					color = MaterialTheme.colors.onPrimary
-				)
-			}
-			else if (state.showNote) {
+			if (state.showNote) {
 				Text(
 					text = note,
 					style = MaterialTheme.typography.body2,
